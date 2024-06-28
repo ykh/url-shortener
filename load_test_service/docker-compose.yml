@@ -1,0 +1,35 @@
+services:
+  locust-master:
+    hostname: locust-master
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: locust-master
+    networks:
+      - us_network
+    ports:
+      - "${LOCUST_EXPOSED_PORT}:8089"
+    env_file:
+      - ./envs/locust.env
+    restart: unless-stopped
+    volumes:
+      - ./:/src/
+
+  locust-worker:
+    hostname: locust-worker
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: locust-worker
+    networks:
+      - us_network
+    env_file:
+      - ./envs/locust.env
+    restart: unless-stopped
+    volumes:
+      - ./:/src/
+
+networks:
+  us_network:
+    external: true
+    name: us_network

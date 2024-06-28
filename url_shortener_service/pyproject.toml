@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "url-shortener"
+version = "0.1.0"
+description = ""
+authors = ["Yaser Khahani <yaserkh@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = ">=0.111.0,<0.112.0"
+uvicorn = ">=0.30.1,<0.31"
+pydantic = ">=2.7.3,<2.8"
+aiohttp = ">=3.9.5,<3.10"
+beanie = ">=1.26.0,<1.27"
+kazoo = ">=2.10.0,<2.11"
+redis = ">=5.0.5,<5.1"
+pyjwt = ">=2.8.0,<2.9"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

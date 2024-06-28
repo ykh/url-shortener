@@ -1,0 +1,63 @@
+services:
+  app:
+    hostname: "app"
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: app
+    networks:
+      - us_network
+#    ports:
+#      - "${APP_EXPOSED_PORT}:8000"
+    env_file:
+      - ./envs/app.env
+    user: "${USER_INFO}"
+    depends_on:
+      - db_app
+      - redis
+    restart: unless-stopped
+    volumes:
+      - ./app:/src/app
+      - ./scripts:/src/scripts
+
+  db_app:
+    hostname: "db-app"
+    image: mongo:7-jammy
+    env_file:
+      - envs/app_db.env
+    networks:
+      - us_network
+#    ports:
+#      - "${APP_DB_EXPOSED_PORT}:27017"
+    restart: always
+    volumes:
+      - ./volumes/app_db/data:/data/db
+      - ./volumes/app_db/log:/var/log/mongodb
+      - ./scripts/app-db-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
+
+  redis:
+    hostname: "redis"
+    image: redis:7-alpine
+    env_file:
+      - ./envs/redis.env
+    restart: always
+    networks:
+      - us_network
+#    ports:
+#      - "${REDIS_EXPOSED_PORT}:6379"
+    volumes:
+      - ./volumes/redis/data:/data
+
+  adminer:
+    hostname: "adminer"
+    image: adminer:latest
+    networks:
+      - us_network
+    ports:
+      - "${ADMINER_EXPOSED_PORT}:8080"
+    restart: unless-stopped
+
+networks:
+  us_network:
+    external: true
+    name: us_network

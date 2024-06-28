@@ -1,0 +1,16 @@
+services:
+  zookeeper:
+    hostname: "zookeeper"
+    image: zookeeper:3.8.4
+    restart: always
+    networks:
+      - us_network
+    volumes:
+      - ./volumes/zookeeper/data:/var/lib/zookeeper/data
+      - ./volumes/zookeeper/log:/var/lib/zookeeper/log
+      - ./configs/zoo.cfg:/conf/zoo.cfg
+
+networks:
+  us_network:
+    external: true
+    name: us_network
